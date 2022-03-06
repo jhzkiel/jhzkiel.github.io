@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Keuangan</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="datapekerja.html">Data Pekerja</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="datakeuangan.html">Data Keuangan</a>
+          </li>
+          <li>
+            <a class="nav-link" href="datastakeholder.html">Data Stakeholder</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="datamobil.html">Data Mobil</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="mx-auto"></div>
+    <div class="profile">
+      <a class="navbar-brand" href="#">
+        <img src="opiece.jpg" alt="#" width="35px" style="border-radius: 50%;">  Jehezkiel
+      </a>
+    </div>
+  </nav>
+
+    <div id="app">
+
+        <div class="container">
+            <div class="py-5 text-center">
+              <h2>Informasi Keuangan</h2>
+              <p class="lead">below is the data of Peron's Financial</p>
+            </div>
+      
+              <div class="col-md-12">
+                <h4 class="mb-3">Data Keuangan<button class="btn btn-md btn-primary" v-on:click="resetForm()">Create New</button>
+                </h4>
+                <table class="table table-striped">
+                    <tr>
+                        <th>ID</th>
+                        <th>Data Keuangan</th>
+                        <th>Pemasukan</th>
+                        <th>Pengeluaran</th>
+                        <th>Gaji Pekerja</th>
+                        <th>Dana Perawatan</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    <tr v-for="keuangan in keuangans">
+                        <td>{{ keuangan.id }}</td>
+                        <td>{{ keuangan.dataKeuangan }}</td>
+                        <td>{{ keuangan.pemasukan }}</td>
+                        <td>{{ keuangan.pengeluaran }}</td>
+                        <td>{{ keuangan.gajiPekerja }}</td>
+                        <td>{{ keuangan.danaPerawatan }}</td>
+                        <td><button class="btn btn-md btn-warning" v-on:click="getEdit(keuangan)">Edit</button></td>
+                        <td><button class="btn btn-danger" v-on:click="getDelete(keuangan)">Delete</button></td>
+                    </tr>
+                </table>
+
+                <div v-if="message" class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+                
+            
+                <h4 class="mb-3">Data Keuangan Peron</h4>
+                <form class="needs-validation" novalidate>
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="dataKeuangan">Data Keuangan</label>
+                        <input  v-model="dataKeuangan" type="text" class="form-control" id="dataKeuangan" placeholder="" value="" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="pemasukan">Pemasukan</label>
+                      <input  v-model="pemasukan" type="text" class="form-control" id="pemasukan" placeholder="" value="" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="pengeluaran">Pengeluaran</label>
+                      <input v-model="pengeluaran" type="text" class="form-control" id="pengeluaran" placeholder="" value="" required>
+                    </div>
+                  
+      
+                  <div class="col-md-6 mb-3">
+                    <label for="gajiPekerja">Gaji Pekerja</label>
+                    <div class="input-group">
+                      <input v-model="gajiPekerja" type="text" class="form-control" id="gajiPekerja" placeholder="" required>
+                      </div>
+                  </div>
+      
+                  <div class="col-md-6 mb-3">
+                    <label for="danaPerawatan">Dana Perawatan</label>
+                    <input v-model="danaPerawatan" type="text" class="form-control" id="danaPerawatan" placeholder="">
+                  </div>
+      
+                  </div>
+                </div>
+                
+                  <hr class="mb-4">
+                  <button v-if="!editMode && !deleteMode" v-on:click="createKeuangan" class="btn btn-primary btn-lg btn-block" type="submit">Submit Data</button>
+                  <button v-if="editMode" v-on:click="updateKeuangan" class="btn btn-warning btn-lg btn-block" type="submit">Update Data</button>
+                  <button v-if="deleteMode" v-on:click="deleteKeuangan" class="btn btn-danger btn-lg btn-block" type="submit">Delete Data</button>
+                  
+                </form>
+              </div>
+            </div>
+
+            <footer class="my-5 pt-5 text-muted text-center text-small">
+                <p class="mb-1">&copy; 2021 FTI UNAI</p>
+                <ul class="list-inline">
+                  <li class="list-inline-item"><a href="#">Privacy</a></li>
+                  <li class="list-inline-item"><a href="#">Terms</a></li>
+                  <li class="list-inline-item"><a href="#">Support</a></li>
+                </ul>
+              </footer>
+
+    </div>
+    
+
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        var app = new Vue ({
+            el: '#app',
+            data: {
+                errors: [],
+                message: null,
+                keuangans:[],
+                keuanganIdEdit: null,
+                keuanganIdDelete: null,
+                editMode: false,
+                deleteMode: false,
+                dataKeuangan: '',
+                pemasukan: '',
+                pengeluaran: '',
+                gajiPekerja: '',
+                danaPerawatan: '',
+            },
+            mounted: function() {
+                this.getKeuangan();
+            },
+            methods: {
+                getKeuangan() {
+                    axios.get('https://621f72f0ce99a7de193ca941.mockapi.io/keuangan')
+                        .then(response => {
+                            this.keuangans = response.data;
+                            console.log(response);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+                createKeuangan: function(){
+                    axios.post('https://621f72f0ce99a7de193ca941.mockapi.io/keuangan', {
+                      dataKeuangan: this.dataKeuangan,
+                      pemasukan: this.pemasukan,
+                      pengeluaran: this.pengeluaran,
+                      gajiPekerja: this.gajiPekerja,
+                      danaPerawatan: this.danaPerawatan,
+                    })
+                    .then(response => {
+                            this.getKeuangan();
+                            this.message = "Your data has been submitted";
+                            console.log(response);
+                    })
+                    .catch(error => {
+                            console.log(error);
+                    });
+                },
+                resetForm: function () {
+                    this.message = null;
+                    this.editMode = false;
+                    this.deleteMode = false;
+                    this.keuanganIdEdit = null;
+                    this.dataKeuangan = null;
+                    this.pemasukan = null;
+                    this.pengeluaran = null;
+                    this.gajiPekerja = null;
+                    this.danaPerawatan = null;
+                },
+                getEdit: function (keuangan) {
+                    this.message = null;
+                    this.editMode = true;
+                    this.deleteMode = false;
+                    this.keuanganIdEdit = keuangan.id;
+                    this.dataKeuangan = keuangan.dataKeuangan;
+                    this.pemasukan = keuangan.pemasukan;
+                    this.pengeluaran = keuangan.pengeluaran;
+                    this.gajiPekerja = keuangan.gajiPekerja;
+                    this.danaPerawatan = keuangan.danaPerawatan;
+                },
+                getDelete: function (keuangan) {
+                    this.message = null;
+                    this.deleteMode = true;
+                    this.editMode = false;
+                    this.keuanganIdDelete = keuangan.id;
+                    this.dataKeuangan = keuangan.dataKeuangan;
+                    this.pemasukan = pekerja.pemasukan;
+                    this.pengeluaran = keuangan.pengeluaran;
+                    this.gajiPekerja = keuangan.gajiPekerja;
+                    this.danaPerawatan = keuangan.danaPerawatan;
+                },
+                updateKeuangan: function () {
+                    axios.put(`https://621f72f0ce99a7de193ca941.mockapi.io/keuangan/keuanganIdEdit}`, {
+                            dataKeuangan: this.dataKeuangan,
+                            pemasukan: this.pemasukan,
+                            nikPekerja: this.pengeluaran,
+                            gajiPekerja: this.gajiPekerja,
+                            danaPerawatan: this.danaPerawatan,
+                        })
+                        .then(res => {
+                            // handle success
+                            this.message = "Your data has been updated";
+                            this.getKeuangan();
+                        })
+                        .catch(err => {
+                            // handle error
+                            console.log(err);
+                        })
+                },
+                // Delete User
+                deleteKeuangan: function () {
+                    axios.delete(`https://621f72f0ce99a7de193ca941.mockapi.io/keuangan/${this.keuanganIdDelete}`)
+                        .then(res => {
+                            // handle success
+                            this.message = "Your data has been deleted";
+                            this.getKeuangan();
+                        })
+                        .catch(err => {
+                            // handle error
+                            console.log(err);
+                        })
+                }
+            }
+        })
+        
+    </script>
+
+
+</body>
+</html>

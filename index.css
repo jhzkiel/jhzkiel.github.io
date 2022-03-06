@@ -1,0 +1,17 @@
+body{
+    background-color: antiquewhite !important ;
+}
+nav li{
+    margin: 0 3rem;
+    padding: 2px 3px;
+}
+nav li a{
+    color: rgb(207, 153, 51) !important;
+}
+nav li:hover{
+    border-radius: 25px;
+    background-color: rgb(207, 153, 51);
+}
+nav li a:hover{
+    color: white !important;
+}
